@@ -3,29 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package general.controllers;
+package user.controllers;
 
+import daos.OrderDetailsDAO;
+import daos.ProductDAO;
+import dtos.OrderDTO;
+import dtos.OrderDetailsDTO;
+import dtos.ProductDTO;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ngochuu
  */
-public class MainController extends HttpServlet {
+public class ShowingCartController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String LOGIN = "LoginController";
-    private static final String SEARCHING_PRODUCT = "SearchProductController";
-    private static final String REGISTRATION = "RegistrationController";
-    private static final String ADDING_PRODUCT = "AddingProductController";
-    private static final String SHOWING_CART = "ShowingCartController";
-    private static final String UPDATING_QUANTITY = "UpdatingQuantityController";
-    private static final String DELETING_FROM_CART = "DeleteFromCartController";
-    
+    private static final String SUCCESS = "cart.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,26 +43,28 @@ public class MainController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if(action.equals("Login")) {
-                url = LOGIN;
-            } else if(action.equals("SearchProduct")) {
-                url = SEARCHING_PRODUCT;
-            } else if(action.equals("AddingProduct")) {
-                url = ADDING_PRODUCT;
-            } else if(action.equals("Register")) {
-                url = REGISTRATION;
-            } else if(action.equals("ShowCart")) {
-                url = SHOWING_CART;
-            } else if(action.equals("UpdateQuantity")) {
-                url = UPDATING_QUANTITY;
-            } else if(action.equals("DeleteFromCart")) {
-                url = DELETING_FROM_CART;
+            HttpSession session = request.getSession();
+            OrderDTO orderDTO = (OrderDTO) session.getAttribute("ORDER");
+            if (orderDTO != null) {
+                List<OrderDetailsDTO> listOrderDetails = new OrderDetailsDAO().getObjectsByOrderID(orderDTO.getOrderID());
+                //get products' details
+                Hashtable<Integer, ProductDTO> listProduct = new Hashtable<>();
+                ProductDAO productDAO = new ProductDAO();
+
+                for (OrderDetailsDTO dto : listOrderDetails) {
+                    ProductDTO productDTO = productDAO.getObjectByProductID(dto.getProductID());
+                    if (productDTO != null) {
+                        listProduct.put(productDTO.getProductID(), productDTO);
+                    }
+                }
+                request.setAttribute("LIST_ORDER_DETAILS", listOrderDetails);
+                request.setAttribute("LIST_PRODUCT", listProduct);
+                url = SUCCESS;
             } else {
-                request.setAttribute("ERROR", "The action is not found!");
+                request.setAttribute("ERROR", "Cart is not found!");
             }
         } catch (Exception e) {
-            log("ERROR at MainController: " + e.getMessage());
+            log("ERROR at ShowingCartController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

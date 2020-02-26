@@ -6,15 +6,19 @@
 package dtos;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  *
  * @author ngochuu
  */
 public class ProductDTO implements Serializable {
-    private int productID, price, quantity, categoryID;
-    private String productName, imgURL, status;
 
+    private int productID, quantity, categoryID;
+    private String productName, imgURL, status, description;
+    private Timestamp postingDate;
+    private double price;
+    
     public ProductDTO() {
     }
 
@@ -26,11 +30,11 @@ public class ProductDTO implements Serializable {
         this.productID = productID;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -73,5 +77,21 @@ public class ProductDTO implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
+    public Timestamp getPostingDate() {
+        return postingDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPostingDate(Timestamp postingDate) {
+        this.postingDate = postingDate;
+    }
+
 }

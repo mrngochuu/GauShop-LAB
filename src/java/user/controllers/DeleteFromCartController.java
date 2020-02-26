@@ -3,29 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package general.controllers;
+package user.controllers;
 
+import daos.OrderDetailsDAO;
+import dtos.OrderDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ngochuu
  */
-public class MainController extends HttpServlet {
-
+public class DeleteFromCartController extends HttpServlet {
     private static final String ERROR = "error.jsp";
-    private static final String LOGIN = "LoginController";
-    private static final String SEARCHING_PRODUCT = "SearchProductController";
-    private static final String REGISTRATION = "RegistrationController";
-    private static final String ADDING_PRODUCT = "AddingProductController";
-    private static final String SHOWING_CART = "ShowingCartController";
-    private static final String UPDATING_QUANTITY = "UpdatingQuantityController";
-    private static final String DELETING_FROM_CART = "DeleteFromCartController";
-    
+    private static final String SUCCESS = "ShowingCartController";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,26 +36,21 @@ public class MainController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if(action.equals("Login")) {
-                url = LOGIN;
-            } else if(action.equals("SearchProduct")) {
-                url = SEARCHING_PRODUCT;
-            } else if(action.equals("AddingProduct")) {
-                url = ADDING_PRODUCT;
-            } else if(action.equals("Register")) {
-                url = REGISTRATION;
-            } else if(action.equals("ShowCart")) {
-                url = SHOWING_CART;
-            } else if(action.equals("UpdateQuantity")) {
-                url = UPDATING_QUANTITY;
-            } else if(action.equals("DeleteFromCart")) {
-                url = DELETING_FROM_CART;
+            HttpSession session = request.getSession();
+            OrderDTO orderDTO = (OrderDTO) session.getAttribute("ORDER");
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            if(productID > 0) {
+                if(new OrderDetailsDAO().deleteFromCart(orderDTO.getOrderID(), productID)) {
+                    request.setAttribute("MESSAGE", "Delete the product success!");
+                    url = SUCCESS;
+                } else {
+                    request.setAttribute("ERROR", "Delete the product failed");
+                }
             } else {
-                request.setAttribute("ERROR", "The action is not found!");
+                request.setAttribute("ERROR", "The product is not found!");
             }
         } catch (Exception e) {
-            log("ERROR at MainController: " + e.getMessage());
+            log("ERROR at DeleteFromCartController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

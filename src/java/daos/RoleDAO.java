@@ -5,11 +5,13 @@
  */
 package daos;
 
+import dtos.RoleDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import utils.DatabaseUtils;
 
 /**
  *
@@ -25,4 +27,46 @@ public class RoleDAO implements Serializable {
         if(pstm != null) pstm.close();
         if(conn != null) conn.close();
     }
+    
+    public RoleDTO getObjectByID(int roleID) throws ClassNotFoundException, SQLException {
+        RoleDTO dto = null;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if(conn != null) {
+                String sql = "SELECT Rolename FROM Roles WHERE roleID = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setInt(1, roleID);
+                rs = pstm.executeQuery();
+                if(rs.next()) {
+                    dto = new RoleDTO();
+                    dto.setRoleID(roleID);
+                    dto.setRoleName(rs.getString("Rolename"));
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return dto;
+    }
+    
+    public RoleDTO getObjectByName(String roleName) throws ClassNotFoundException, SQLException {
+        RoleDTO dto = null;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if(conn != null) {
+                String sql = "SELECT RoleID FROM Roles WHERE Rolename = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setString(1, roleName);
+                rs = pstm.executeQuery();
+                if(rs.next()) {
+                    dto = new RoleDTO();
+                    dto.setRoleID(rs.getInt("RoleID"));
+                    dto.setRoleName(roleName);
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return dto;
+    } 
 }

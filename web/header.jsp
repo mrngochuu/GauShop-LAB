@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <c:url var="homeLink" value="MainController">
-            <c:param name="action" value="SearchArticle"/>
+            <c:param name="action" value="SearchProduct"/>
         </c:url>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -18,15 +18,15 @@
                 <c:url var="logoutLink" value="MainController">
                     <c:param name="action" value="Logout"/>
                 </c:url>
-                <c:url var="manageArticlesLink" value="MainController">
-                    <c:param name="action" value="AdminSearchArticle"/>
+                <c:url var="showCartLink" value="MainController">
+                    <c:param name="action" value="ShowCart"/>
                 </c:url>
-                <c:if test="${sessionScope.ROLE.roleName eq 'member'}" var="isUser">
+                <c:if test="${sessionScope.ROLE.roleName eq 'user'}" var="isUser">
                     <li class="nav-item">
-                        <a class="nav-link mt-2" href="postArticle.jsp">Post Article</a>
+                        <a class="nav-link mt-2" href="${showCartLink}">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link mt-2">${sessionScope.USER.name}</p>
+                        <p class="nav-link mt-2">${sessionScope.USER.username}</p>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link mt-2" href="${logoutLink}">Logout</a>
@@ -35,12 +35,12 @@
 
                 <c:if test="${sessionScope.ROLE.roleName eq 'admin'}" var="isAdmin">
                     <li class="nav-item">
-                        <a class="nav-link mt-2" href="${manageArticlesLink}" >
+                        <a class="nav-link mt-2" href="#" >
                             Manage
                         </a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link mt-2">${sessionScope.USER.name}</p>
+                        <p class="nav-link mt-2">${sessionScope.USER.username}</p>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link mt-2" href="${logoutLink}">Logout</a>

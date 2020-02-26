@@ -12,7 +12,8 @@ import java.io.Serializable;
  * @author ngochuu
  */
 public class OrderDetailsDTO implements Serializable {
-    private int productID, orderID, quantity, price;
+    private int productID, orderID, quantity;
+    private double price;
 
     public OrderDetailsDTO() {
     }
@@ -41,11 +42,11 @@ public class OrderDetailsDTO implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
