@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import utils.DatabaseUtils;
 
 /**
@@ -80,5 +82,58 @@ public class OrderDAO implements Serializable {
             closeConnection();
         }
         return dto;
+    }
+    
+    public boolean updateObject(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        boolean checked = false;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if(conn != null) {
+                String sql = "UPDATE Orders SET isCheckout = ?, OrderPhone = ?, OrderAddress = ?, PaymentType = ?, RecipientName = ?, checkoutDate = ? WHERE orderID = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setBoolean(1, dto.isCheckout());
+                pstm.setString(2, dto.getOrderPhone());
+                pstm.setString(3, dto.getOrderAddress());
+                pstm.setString(4, dto.getPaymentType());
+                pstm.setString(5, dto.getRecipientName());
+                pstm.setTimestamp(6, dto.getCheckoutDate());
+                pstm.setInt(7, dto.getOrderID());
+                checked = pstm.executeUpdate() > 0;
+            }
+        } finally {
+            closeConnection();
+        }
+        return checked;
+    }
+    
+    public List<OrderDTO> getListObjectByUsername(String username, boolean isCheckout) throws SQLException, ClassNotFoundException {
+        List<OrderDTO> list = null;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT OrderID, OrderPhone, OrderAddress, PaymentType, RecipientName, CheckoutDate FROM Orders WHERE username = ? AND isCheckout = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setString(1, username);
+                pstm.setBoolean(2, isCheckout);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    if(list == null) {
+                        list = new ArrayList<>();
+                    }
+                    OrderDTO dto = new OrderDTO();
+                    dto.setOrderID(rs.getInt("OrderID"));
+                    dto.setOrderPhone(rs.getString("OrderPhone"));
+                    dto.setOrderAddress(rs.getString("OrderAddress"));
+                    dto.setPaymentType(rs.getString("PaymentType"));
+                    dto.setRecipientName(rs.getString("RecipentName"));
+                    dto.setCheckoutDate(rs.getTimestamp("CheckoutDate"));
+                    dto.setUsername(username);
+                    list.add(dto);
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return list;
     }
 }

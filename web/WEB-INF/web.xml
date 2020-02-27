@@ -36,6 +36,10 @@
         <servlet-name>PaymentController</servlet-name>
         <servlet-class>user.controllers.PaymentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ShowingHistoryController</servlet-name>
+        <servlet-class>user.controllers.ShowingHistoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>PaymentController</servlet-name>
         <url-pattern>/PaymentController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShowingHistoryController</servlet-name>
+        <url-pattern>/ShowingHistoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

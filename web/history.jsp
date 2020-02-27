@@ -1,6 +1,6 @@
 <%-- 
-    Document   : cart
-    Created on : Feb 26, 2020, 5:46:36 PM
+    Document   : history
+    Created on : Feb 27, 2020, 5:48:16 PM
     Author     : ngochuu
 --%>
 
@@ -10,26 +10,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <title>Cart Page</title>
+        <title>History Page</title>
     </head>
     <body>
         <%@include file="header.jsp" %>
         <div class="container mt-lg-4" id="content">
-            <h2>Your shopping cart</h2>
-            <h4 class="text-center"><font color="red">${requestScope.MESSAGE}</font></h4>
-                <c:if test="${not empty requestScope.LIST_ORDER_DETAILS}" var="NoOrder">
-
+            <h2>Transaction history</h2>
+            <c:if test="${not empty requestScope.LIST_ORDER_DETAILS}" var="NoOrder">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 10%; text-align: center;">Name</th>
-                            <th style="width: 20%; text-align: center;">IMG</th>
-                            <th style="width: 25%; text-align: center;">Description</th>
-                            <th style="width: 5%; text-align: center;">Price</th>
-                            <th style="width: 2%; text-align: center;">Quantity</th>
-                            <th style="width: 5%; text-align: center;">Amount</th>
-                            <th style="width: 25%; text-align: center;">Status</th>
-                            <th style="width: 8%; text-align: center;">Delete</th>
+                            <th style="width: 25%; text-align: center;">Name</th>
+                            <th style="width: 25%; text-align: center;">IMG</th>
+                            <th style="width: 15%; text-align: center;">Price</th>
+                            <th style="width: 15%; text-align: center;">Quantity</th>
+                            <th style="width: 20%; text-align: center;">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,11 +49,11 @@
                                     <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'soldout'}"><span class="btn btn-light text-info">Sold-out</span></c:if>
                                     <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'deleted'}"><span class="btn btn-light  text-danger">Not available</span></c:if>
                                     <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'active' && requestScope.LIST_PRODUCT[orderDTO.productID].quantity < orderDTO.quantity}"><span class="btn btn-light text-warning">Only ${requestScope.LIST_PRODUCT[orderDTO.productID].quantity} products remain</span></c:if>
-                                </td>
-                                <!-- delete -->
-                                <td class="active">
-                                    <form action="confirmation.jsp" method="POST">
-                                        <input type="hidden" name="productID" value="${orderDTO.productID}"/>
+                                    </td>
+                                    <!-- delete -->
+                                    <td class="active">
+                                        <form action="confirmation.jsp" method="POST">
+                                            <input type="hidden" name="productID" value="${orderDTO.productID}"/>
                                         <input type="hidden" name="mess" value="Do you want to delete ${requestScope.LIST_PRODUCT[orderDTO.productID].productName} ?"/>
                                         <input type="submit" class="btn btn-block btn-warning" value="Delete">
                                     </form>

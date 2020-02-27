@@ -11,7 +11,6 @@ import dtos.OrderDTO;
 import dtos.OrderDetailsDTO;
 import dtos.ProductDTO;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -47,18 +46,20 @@ public class ShowingCartController extends HttpServlet {
             OrderDTO orderDTO = (OrderDTO) session.getAttribute("ORDER");
             if (orderDTO != null) {
                 List<OrderDetailsDTO> listOrderDetails = new OrderDetailsDAO().getObjectsByOrderID(orderDTO.getOrderID());
-                //get products' details
-                Hashtable<Integer, ProductDTO> listProduct = new Hashtable<>();
-                ProductDAO productDAO = new ProductDAO();
+                if (listOrderDetails != null) {
+                    //get products' details
+                    Hashtable<Integer, ProductDTO> listProduct = new Hashtable<>();
+                    ProductDAO productDAO = new ProductDAO();
 
-                for (OrderDetailsDTO dto : listOrderDetails) {
-                    ProductDTO productDTO = productDAO.getObjectByProductID(dto.getProductID());
-                    if (productDTO != null) {
-                        listProduct.put(productDTO.getProductID(), productDTO);
+                    for (OrderDetailsDTO dto : listOrderDetails) {
+                        ProductDTO productDTO = productDAO.getObjectByProductID(dto.getProductID());
+                        if (productDTO != null) {
+                            listProduct.put(productDTO.getProductID(), productDTO);
+                        }
                     }
+                    request.setAttribute("LIST_PRODUCT", listProduct);
                 }
                 request.setAttribute("LIST_ORDER_DETAILS", listOrderDetails);
-                request.setAttribute("LIST_PRODUCT", listProduct);
                 url = SUCCESS;
             } else {
                 request.setAttribute("ERROR", "Cart is not found!");

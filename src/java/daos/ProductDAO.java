@@ -129,7 +129,7 @@ public class ProductDAO implements Serializable {
         try {
             conn = DatabaseUtils.getConnection();
             if (conn != null) {
-                String sql = "SELECT productName, description, imgURL FROM products WHERE productID = ?";
+                String sql = "SELECT productName, description, imgURL, quantity, status FROM products WHERE productID = ?";
                 pstm = conn.prepareStatement(sql);
                 pstm.setInt(1, productID);
                 rs = pstm.executeQuery();
@@ -139,11 +139,51 @@ public class ProductDAO implements Serializable {
                     dto.setProductName(rs.getString("productName"));
                     dto.setDescription(rs.getString("description"));
                     dto.setImgURL(rs.getString("imgURL"));
+                    dto.setStatus(rs.getString("status"));
+                    dto.setQuantity(rs.getInt("quantity"));
                 }
             }
         } finally {
             closeConnection();
         }
         return dto;
+    }
+    
+    public boolean checkAvaiable(int productID, int quantity, String status) throws ClassNotFoundException, SQLException {
+        boolean checked = false;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT productID FROM products WHERE productID = ? AND quantity >= ? AND status = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setInt(1, productID);
+                pstm.setInt(2, quantity);
+                pstm.setString(3, status);
+                rs = pstm.executeQuery();
+                checked = rs.next();
+            }
+        } finally {
+            closeConnection();
+        }
+        return checked;
+    }
+    
+    public void updateQuantity(int productID, int quantity, String status) throws ClassNotFoundException, SQLException {
+        try {
+            conn = DatabaseUtils.getConnection();
+            if(conn != null) {
+                String sql = "UPDATE Products SET quantity = ?";
+                if(!status.isEmpty()) {
+                    sql += ", status = '"+ status +"'";
+                }
+                sql += " WHERE productID = ?";
+                pstm = conn.prepareStatement(sql);
+                pstm.setInt(1, quantity);
+                pstm.setInt(2, productID);
+                pstm.executeUpdate();
+            }
+        } finally {
+            closeConnection();
+        }
     }
 }

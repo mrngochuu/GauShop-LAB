@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author ngochuu
  */
 public class PaymentErrorObject implements Serializable {
-    private String recipientNameError, phoneError, addressError;
+    private String recipientNameError, phoneError, addressError, paymentTypeError;
 
     public PaymentErrorObject() {
     }
@@ -39,6 +39,14 @@ public class PaymentErrorObject implements Serializable {
 
     public void setAddressError(String addressError) {
         this.addressError = addressError;
+    }
+
+    public String getPaymentTypeError() {
+        return paymentTypeError;
+    }
+
+    public void setPaymentTypeError(String paymentTypeError) {
+        this.paymentTypeError = paymentTypeError;
     }
     
 }

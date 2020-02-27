@@ -6,6 +6,7 @@
 package dtos;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  *
@@ -13,8 +14,9 @@ import java.io.Serializable;
  */
 public class OrderDTO implements Serializable {
     private int orderID;
-    private String orderPhone, orderAddress, paymentType, username;
+    private String orderPhone, orderAddress, paymentType, username, recipientName;
     private boolean checkout;
+    private Timestamp checkoutDate;
 
     public OrderDTO() {
     }
@@ -65,6 +67,22 @@ public class OrderDTO implements Serializable {
 
     public void setCheckout(boolean checkout) {
         this.checkout = checkout;
+    }
+
+    public String getRecipientName() {
+        return recipientName;
+    }
+
+    public void setRecipientName(String recipientName) {
+        this.recipientName = recipientName;
+    }
+
+    public Timestamp getCheckoutDate() {
+        return checkoutDate;
+    }
+
+    public void setCheckoutDate(Timestamp checkoutDate) {
+        this.checkoutDate = checkoutDate;
     }
     
 }
