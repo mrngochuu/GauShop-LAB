@@ -21,15 +21,21 @@
                 <c:url var="showCartLink" value="MainController">
                     <c:param name="action" value="ShowCart"/>
                 </c:url>
+                <c:url var="showHistoryLink" value="MainController">
+                    <c:param name="action" value="ShowHistory"/>
+                </c:url>
                 <c:if test="${sessionScope.ROLE.roleName eq 'user'}" var="isUser">
                     <li class="nav-item">
-                        <a class="nav-link mt-2" href="${showCartLink}">Cart</a>
+                        <a class="nav-link mt-2" href="${showHistoryLink}"><i class="fas fa-history mr-1"></i>History</a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link mt-2">${sessionScope.USER.username}</p>
+                        <a class="nav-link mt-2" href="${showCartLink}"><i class="fas fa-shopping-cart mr-1"></i>Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mt-2" href="${logoutLink}">Logout</a>
+                        <p class="nav-link mt-2"><i class="fas fa-users-cog mr-1"></i>${sessionScope.USER.username}</p>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mt-2" href="${logoutLink}"><i class="fas fa-sign-out-alt mr-1"></i>Logout</a>
                     </li>
                 </c:if>
 
@@ -40,10 +46,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <p class="nav-link mt-2">${sessionScope.USER.username}</p>
+                        <p class="nav-link mt-2"><i class="fas fa-users-cog mr-1"></i>${sessionScope.USER.username}</p>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mt-2" href="${logoutLink}">Logout</a>
+                        <a class="nav-link mt-2" href="${logoutLink}"><i class="fas fa-sign-out-alt mr-1"></i>Logout</a>
                     </li>
                 </c:if>
 

@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://kit.fontawesome.com/5a401084f7.js" crossorigin="anonymous"></script>
         <title>Home Page</title>
     </head>
     <body>
@@ -60,7 +61,7 @@
                                             <td style="text-align: center;">${dto.imgURL}</td>
                                             <td style="text-align: center;">${dto.description}</td>
                                             <td style="text-align: center;">${dto.price}</td>
-                                            <td style="text-align: center;">${dto.postingDate.hours}:${dto.postingDate.minutes} ${dto.postingDate.date}/${dto.postingDate.month + 1}/${dto.postingDate.year + 1900} </td>
+                                            <td style="text-align: center;">${dto.postingDate.hours}:${dto.postingDate.minutes} ${dto.postingDate.date}/${dto.postingDate.month + 1}/${dto.postingDate.year + 1900}</td>
                                             <td style="text-align: center;">${sessionScope.LIST_CATEGORY.get(dto.categoryID).categoryName}</td>
                                             <c:url var="addToCart" value="MainController">
                                                 <c:param name="action" value="AddingProduct"/>

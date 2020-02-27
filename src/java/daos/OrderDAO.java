@@ -125,7 +125,7 @@ public class OrderDAO implements Serializable {
                     dto.setOrderPhone(rs.getString("OrderPhone"));
                     dto.setOrderAddress(rs.getString("OrderAddress"));
                     dto.setPaymentType(rs.getString("PaymentType"));
-                    dto.setRecipientName(rs.getString("RecipentName"));
+                    dto.setRecipientName(rs.getString("RecipientName"));
                     dto.setCheckoutDate(rs.getTimestamp("CheckoutDate"));
                     dto.setUsername(username);
                     list.add(dto);

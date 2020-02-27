@@ -26,6 +26,7 @@ public class MainController extends HttpServlet {
     private static final String UPDATING_QUANTITY = "UpdatingQuantityController";
     private static final String DELETING_FROM_CART = "DeleteFromCartController";
     private static final String PAYMENT = "PaymentController";
+    private static final String SHOWING_HISTORY = "ShowingHistoryController";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,6 +59,8 @@ public class MainController extends HttpServlet {
                 url = DELETING_FROM_CART;
             } else if(action.equals("Pay")) {
                 url = PAYMENT;
+            } else if(action.equals("ShowHistory")) {
+                url = SHOWING_HISTORY;
             } else {
                 request.setAttribute("ERROR", "The action is not found!");
             }

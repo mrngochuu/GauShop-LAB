@@ -62,7 +62,7 @@ public class ShowingHistoryController extends HttpServlet {
             request.setAttribute("LIST_ORDER", listOrder);
             url = SUCCESS;
         } catch (Exception e) {
-            log("ERROR at ShowingHistoryController: " + e.getMessage());
+                log("ERROR at ShowingHistoryController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
