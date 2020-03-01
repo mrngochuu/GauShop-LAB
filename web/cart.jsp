@@ -25,8 +25,8 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th style="width: 20%; text-align: center;">Image</th>
                             <th style="width: 10%; text-align: center;">Name</th>
-                            <th style="width: 20%; text-align: center;">IMG</th>
                             <th style="width: 25%; text-align: center;">Description</th>
                             <th style="width: 5%; text-align: center;">Price</th>
                             <th style="width: 2%; text-align: center;">Quantity</th>
@@ -41,8 +41,10 @@
                             <c:set var="total" value="${total + (orderDTO.price * orderDTO.quantity)}"/>
                             <tr>
                                 <c:set var="soldout" value="${requestScope.LIST_PRODUCT[orderDTO.productID].quantity eq 0}"/>
+                                <td style="text-align: center;">
+                                    <img src="http://localhost:8084/Image/${requestScope.LIST_PRODUCT[orderDTO.productID].imgURL}" width="80px" height="80px" >
+                                </td>
                                 <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].productName}</td>
-                                <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].imgURL}</td>
                                 <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].description}</td>
                                 <td style="text-align: center;">$${orderDTO.price}</td>
                                 <td style="text-align: center;">

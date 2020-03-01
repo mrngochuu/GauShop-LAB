@@ -80,7 +80,7 @@ public class PaymentController extends HttpServlet {
                     ProductDAO productDAO = new ProductDAO();
                     //check avaiable products
                     for (OrderDetailsDTO dto : listOrderDetails) {
-                        if (!productDAO.checkAvaiable(dto.getOrderID(), dto.getQuantity(), "active")) {
+                        if (!productDAO.checkAvaiable(dto.getProductID(), dto.getQuantity(), "active")) {
                             checkedSoldout = false;
                             break;
                         }

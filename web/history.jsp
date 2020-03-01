@@ -40,12 +40,11 @@
                                 <table class="table table-striped">
                                     <thead class="border border-warning" style="border: 1px;">
                                         <tr>
+                                            <th style="width: 15%; text-align: center;">Product Image</th>
                                             <th style="width: 10%; text-align: center;">Product Name</th>
-                                            <th style="width: 15%; text-align: center;">Product IMG</th>
                                             <th style="width: 5%; text-align: center;">Price</th>
                                             <th style="width: 5%; text-align: center;">Quantity</th>
                                             <th style="width: 5%; text-align: center;">Amount</th>
-                                            
                                             <th style="width: 10%; text-align: center;">Recipient Name</th>
                                             <th style="width: 10%; text-align: center;">Recipient Phone</th>
                                             <th style="width: 10%; text-align: center;">Delivery Address</th>
@@ -58,20 +57,22 @@
                                             <c:forEach items="${requestScope.HASTABLE_ORDER_DETAILS[order.orderID]}" var="details">
                                                 <c:if test="${not empty requestScope.HASTABLE_PRODUCT[details.productID]}">
                                                     <tr>
+                                                        <td style="text-align: center;">
+                                                            <img src="http://localhost:8084/Image/${requestScope.HASTABLE_PRODUCT[details.productID].imgURL}" width="80px" height="80px" >
+                                                        </td>
                                                         <td style="text-align: center;">${requestScope.HASTABLE_PRODUCT[details.productID].productName}</td>
-                                                        <td style="text-align: center;">${requestScope.HASTABLE_PRODUCT[details.productID].imgURL}</td>
                                                         <td style="text-align: center;">$${details.price}</td>
                                                         <td style="text-align: center;">${details.quantity}</td>
                                                         <td style="text-align: center;">$${details.quantity * details.price}</td>
-                                                        
+
                                                         <td style="text-align: center;">${order.recipientName}</td>
                                                         <td style="text-align: center;">${order.orderPhone}</td>
                                                         <td style="text-align: center;">${order.orderAddress}</td>
                                                         <td style="text-align: center;">
                                                             <c:if test="${order.paymentType eq 'cast'}">Cash payment upon delivery</c:if>
                                                             <c:if test="${order.paymentType eq 'paypal'}">Paypal online</c:if>
-                                                        </td>
-                                                        <td style="text-align: center;">${order.checkoutDate.hours}:${order.checkoutDate.minutes} ${order.checkoutDate.date}/${order.checkoutDate.month + 1}/${order.checkoutDate.year + 1900}</td>
+                                                            </td>
+                                                            <td style="text-align: center;">${order.checkoutDate.hours}:${order.checkoutDate.minutes} ${order.checkoutDate.date}/${order.checkoutDate.month + 1}/${order.checkoutDate.year + 1900}</td>
                                                     </tr>
                                                 </c:if>
                                             </c:forEach>

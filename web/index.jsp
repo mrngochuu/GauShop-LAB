@@ -44,21 +44,25 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th style="width: 15%; text-align: center;">Image</th>
                                         <th style="width: 10%; text-align: center;">Product</th>
-                                        <th style="width: 15%; text-align: center;">IMG</th>
                                         <th style="width: 30%; text-align: center;">Description</th>
                                         <th style="width: 5%; text-align: center;">Price</th>
                                         <th style="width: 10%; text-align: center;">Create Date</th>
                                         <th style="width: 10%; text-align: center;">Category</th>
-                                        <th style="width: 10%; text-align: center;"></th>
+                                            <c:if test="${sessionScope.ROLE.roleName eq 'user'}">
+                                            <th style="width: 10%; text-align: center;"></th>
+                                            </c:if>
                                     </tr>
                                 </thead>
 
                                 <c:if test="${not empty requestScope.LIST_PRODUCT}">
                                     <c:forEach items="${LIST_PRODUCT}" var="dto">
                                         <tr>
+                                            <td style="text-align: center;">
+                                                <img src="http://localhost:8084/Image/${dto.imgURL}" width="80px" height="80px" >
+                                            </td>
                                             <td style="text-align: center;">${dto.productName}</td>
-                                            <td style="text-align: center;">${dto.imgURL}</td>
                                             <td style="text-align: center;">${dto.description}</td>
                                             <td style="text-align: center;">$${dto.price}</td>
                                             <td style="text-align: center;">${dto.postingDate.hours}:${dto.postingDate.minutes} ${dto.postingDate.date}/${dto.postingDate.month + 1}/${dto.postingDate.year + 1900}</td>
@@ -73,7 +77,9 @@
                                                 <c:param name="cbRange" value="${param.cbRange}"/>
                                                 <c:param name="cbCategory" value="${param.cbCategory}"/>
                                             </c:url>
-                                            <td style="text-align: center;"><a class="btn btn-block btn-secondary" href="${addToCart}">Add</a></td>
+                                            <c:if test="${sessionScope.ROLE.roleName eq 'user'}">
+                                                <td style="text-align: center;"><a class="btn btn-block btn-secondary" href="${addToCart}">Add</a></td>
+                                            </c:if>
                                         </tr>
                                     </c:forEach>
                                 </c:if>

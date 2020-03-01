@@ -36,7 +36,7 @@
                                 <a href="${homeLink}">Home Page</a>
                             </div>
                             <div class="mb-3">
-                                <a href="register.jsp">Register Account</a>
+                                <a href="registration.jsp">Register Account</a>
                                 <div>
                                 </div>
                             </div>

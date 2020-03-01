@@ -43,8 +43,8 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th style="width: 20%; text-align: center;">Image</th>
                                             <th style="width: 15%; text-align: center;">Product</th>
-                                            <th style="width: 20%; text-align: center;">IMG</th>
                                             <th style="width: 20%; text-align: center;">Description</th>
                                             <th style="width: 5%; text-align: center;">Price</th>
                                             <th style="width: 5%; text-align: center;">Quantity</th>
@@ -60,8 +60,10 @@
                                     <c:forEach items="${LIST_PRODUCT}" var="dto">
                                         <tr>
                                         <form action="MainController" method="POST">
+                                            <td style="text-align: center;">
+                                                <img src="http://localhost:8084/Image/${dto.imgURL}" width="80px" height="80px" >
+                                            </td>
                                             <td style="text-align: center;">${dto.productName}</td>
-                                            <td style="text-align: center;">${dto.imgURL}</td>
                                             <td style="text-align: center;">${dto.description}</td>
                                             <td style="text-align: center;">$${dto.price}</td>
                                             <td style="text-align: center;">${dto.quantity}</td>

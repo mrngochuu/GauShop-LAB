@@ -13,7 +13,6 @@ import dtos.OrderDetailsDTO;
 import dtos.ProductDTO;
 import dtos.UserDTO;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -80,7 +79,7 @@ public class SearchHistoryController extends HttpServlet {
                         hashtableOrderDetails.put(orderDTO.getOrderID(), listOrderDetailsDTOs);
                         for (OrderDetailsDTO listOrderDetailsDTO : listOrderDetailsDTOs) {
                             ProductDTO productDTO = productDAO.getObjectByProductID(listOrderDetailsDTO.getProductID());
-                            if (productDTO.getProductName().contains(txtSearch)) {
+                            if (productDTO.getProductName().toLowerCase().contains(txtSearch.toLowerCase())) {
                                 hashtableProduct.put(productDTO.getProductID(), productDTO);
                             }
                         }

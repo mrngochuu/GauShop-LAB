@@ -34,7 +34,7 @@
                                 <input type="password" name="txtConfirm" placeholder="Confirm password" class="form-control mb-3" />
                                 <font color="red"><p class="mb-3">${requestScope.INVALID.confirmError}</p></font>
                                 
-                                <input type="text" name="txtPhone" value="${param.txtAddress}" placeholder="Phone" class="form-control mb-3"/>
+                                <input type="text" name="txtPhone" value="${param.txtPhone}" placeholder="Phone" class="form-control mb-3"/>
                                 <font color="red"><p class="mb-3">${requestScope.INVALID.phoneError}</p></font>
                                 
                                 <input type="text" name="txtAddress" value="${param.txtAddress}" placeholder="Address" class="form-control mb-3"/>

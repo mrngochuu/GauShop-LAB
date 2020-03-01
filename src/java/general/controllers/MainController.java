@@ -33,6 +33,7 @@ public class MainController extends HttpServlet {
     private static final String ADMIN_SHOW_PRODUCT = "AdminShowProductController";
     private static final String ADMIN_UPDATE_PRODUCT_DETAILS = "AdminUpdateProductDetailsController";
     private static final String ADMIN_CREATE_PRODUCT = "AdminCreateProductController";
+    private static final String UPLOADING_IMAGE = "UploadImageController";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -79,6 +80,8 @@ public class MainController extends HttpServlet {
                 url = ADMIN_UPDATE_PRODUCT_DETAILS;
             } else if (action.equals("AdminCreateProduct")) {
                 url = ADMIN_CREATE_PRODUCT;
+            } else if (action.equals("UploadImage")) {
+                url = UPLOADING_IMAGE;
             } else {
                 request.setAttribute("ERROR", "The action is not found!");
             }

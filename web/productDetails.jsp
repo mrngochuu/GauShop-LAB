@@ -13,24 +13,38 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://kit.fontawesome.com/5a401084f7.js" crossorigin="anonymous"></script>
         <title>Product Page</title>
+        <style>
+            input[type='file'] {
+                color: transparent;
+            }
+        </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <div class="container-fluid"> 
+        <div class="container"> 
             <div class="row">
-                <div class="col-sm-12 col-md-8 col-lg-8 mx-auto">
-                    <h1 class="text-center"><font color="red"><p class="mt-3">${requestScope.MESSAGE}</p></font></h1>
-
+                <div class="col-sm-12 col-md-12 col-lg-12 mx-auto">
                     <div class="card card-signin my-5">
-                        <div class="card-body">
-                            <form class="row" action="MainController" method="POST">
-                                <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}"/>
-                                <input type="hidden" name="imgURL" value="${requestScope.PRODUCT.imgURL}"/>
-                                <div class="col-lg-3">
-                                    ${requestScope.PRODUCT.imgURL}
-                                    <font color="red"><p class="mb-3">${requestScope.INVALID.imgURLError}</p></font>
-                                </div>
-                                <div class="offset-lg-2 col-lg-7 border bg-light">
+                        <div class="card-body row">
+                            <div class="col-lg-5 mt-auto mb-auto pt-3 rounded">
+                                <img src="http://localhost:8084/Image/${requestScope.PRODUCT.imgURL}" style="width: 100%; height: auto;">
+                                <form action="EditImageController" enctype="multipart/form-data" method="POST">
+                                    <input type="file" name="file" onchange="this.form.submit()"/>
+                                    <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}"/>
+                                    <input type="hidden" name="productName" value="${requestScope.PRODUCT.productName}"/>
+                                    <input type="hidden" name="description" value="${requestScope.PRODUCT.description}"/>
+                                    <input type="hidden" name="price" value="${requestScope.PRODUCT.price}"/>
+                                    <input type="hidden" name="quantity" value="${requestScope.PRODUCT.quantity}"/>
+                                    <input type="hidden" name="categoryID" value="${requestScope.PRODUCT.categoryID}"/>
+                                    <input type="hidden" name="status" value="${requestScope.PRODUCT.status}"/>
+                                    <input type="hidden" name="postingDate" value="${requestScope.PRODUCT.postingDate}"/>
+                                </form>
+                                <font color="red"><p class="mb-3">${requestScope.INVALID.imgURLError}</p></font>
+                            </div>
+                            <div class="offset-lg-1 col-lg-6 border bg-light">
+                                <form action="MainController" method="POST">
+                                    <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}"/>
+                                    <input type="hidden" name="imgURL" value="${requestScope.PRODUCT.imgURL}"/>
                                     <h3 class="font-weight-bold mb-3">NAME</h3>
                                     <input type="text" name="productName" value="${requestScope.PRODUCT.productName}" class="mb-3 form-control"/>
                                     <font color="red"><p class="mb-3">${requestScope.INVALID.productNameError}</p></font>
@@ -78,36 +92,35 @@
                                     <font color="red"><p class="mb-3">${requestScope.INVALID.categoryError}</p></font>
                                     <font color="red"><p class="mb-3">${requestScope.INVALID.statusError}</p></font>
                                     <button class="form-control btn btn-primary btn-lg mb-3" name="action" value="AdminUpdateProductDetails">Update</button>
-                            </form>
-                            <c:if test="${requestScope.PRODUCT.status eq 'active'}">
-                                <form action="confirmation.jsp">
-                                    <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}" />
-                                    <input type="hidden" name="status" value="inactive" />
-                                    <input type="hidden" name="category" value="${requestScope.PRODUCT.categoryID}" />
-                                    <input type="hidden" name="message" value="Do you want to delete ${requestScope.PRODUCT.productName}?"/>
-                                    <input type="hidden" name="yesAction" value="AdminUpdateProduct" />
-                                    <input type="hidden" name="noAction" value="AdminShowProduct" />
-                                    <button class="form-control btn btn-danger btn-lg mb-3">Delete</button>
                                 </form>
-                            </c:if>
-                            <c:if test="${requestScope.PRODUCT.status eq 'inactive'}">
-                                <form action="confirmation.jsp">
-                                    <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}" />
-                                    <input type="hidden" name="status" value="active" />
-                                    <input type="hidden" name="category" value="${requestScope.PRODUCT.categoryID}" />
-                                    <input type="hidden" name="message" value="Do you want to restore ${requestScope.PRODUCT.productName}?"/>
-                                    <input type="hidden" name="yesAction" value="AdminUpdateProduct" />
-                                    <input type="hidden" name="noAction" value="AdminShowProduct" />
-                                    <button class="form-control btn btn-danger btn-lg mb-3">Restore</button>
-                                </form>
-                            </c:if>
+                                <c:if test="${requestScope.PRODUCT.status eq 'active'}">
+                                    <form action="confirmation.jsp">
+                                        <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}" />
+                                        <input type="hidden" name="status" value="inactive" />
+                                        <input type="hidden" name="category" value="${requestScope.PRODUCT.categoryID}" />
+                                        <input type="hidden" name="message" value="Do you want to delete ${requestScope.PRODUCT.productName}?"/>
+                                        <input type="hidden" name="yesAction" value="AdminUpdateProduct" />
+                                        <input type="hidden" name="noAction" value="AdminShowProduct" />
+                                        <button class="form-control btn btn-danger btn-lg mb-3">Delete</button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${requestScope.PRODUCT.status eq 'inactive'}">
+                                    <form action="confirmation.jsp">
+                                        <input type="hidden" name="productID" value="${requestScope.PRODUCT.productID}" />
+                                        <input type="hidden" name="status" value="active" />
+                                        <input type="hidden" name="category" value="${requestScope.PRODUCT.categoryID}" />
+                                        <input type="hidden" name="message" value="Do you want to restore ${requestScope.PRODUCT.productName}?"/>
+                                        <input type="hidden" name="yesAction" value="AdminUpdateProduct" />
+                                        <input type="hidden" name="noAction" value="AdminShowProduct" />
+                                        <button class="form-control btn btn-danger btn-lg mb-3">Restore</button>
+                                    </form>
+                                </c:if>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-<%@include file="footer.jsp" %>
-</body>
+        <%@include file="footer.jsp" %>
+    </body>
 </html>

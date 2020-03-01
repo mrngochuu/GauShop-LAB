@@ -112,6 +112,7 @@ public class AdminCreateProductController extends HttpServlet {
                 }
             } else {
                 request.setAttribute("INVALID", errorObject);
+                request.setAttribute("imgURL", imgURL);
                 url = INVALID;
             }
         } catch (Exception e) {
