@@ -71,7 +71,7 @@ public class OrderDAO implements Serializable {
                 pstm.setString(2, username);
                 if (pstm.executeUpdate() > 0) {
                     rs = pstm.getGeneratedKeys();
-                    if(rs.next()) {
+                    if (rs.next()) {
                         dto = new OrderDTO();
                         dto.setUsername(username);
                         dto.setOrderID(rs.getInt(1));
@@ -83,12 +83,12 @@ public class OrderDAO implements Serializable {
         }
         return dto;
     }
-    
+
     public boolean updateObject(OrderDTO dto) throws SQLException, ClassNotFoundException {
         boolean checked = false;
         try {
             conn = DatabaseUtils.getConnection();
-            if(conn != null) {
+            if (conn != null) {
                 String sql = "UPDATE Orders SET isCheckout = ?, OrderPhone = ?, OrderAddress = ?, PaymentType = ?, RecipientName = ?, checkoutDate = ? WHERE orderID = ?";
                 pstm = conn.prepareStatement(sql);
                 pstm.setBoolean(1, dto.isCheckout());
@@ -105,7 +105,7 @@ public class OrderDAO implements Serializable {
         }
         return checked;
     }
-    
+
     public List<OrderDTO> getListObjectByUsername(String username, boolean isCheckout) throws SQLException, ClassNotFoundException {
         List<OrderDTO> list = null;
         try {
@@ -117,7 +117,7 @@ public class OrderDAO implements Serializable {
                 pstm.setBoolean(2, isCheckout);
                 rs = pstm.executeQuery();
                 while (rs.next()) {
-                    if(list == null) {
+                    if (list == null) {
                         list = new ArrayList<>();
                     }
                     OrderDTO dto = new OrderDTO();
@@ -128,6 +128,40 @@ public class OrderDAO implements Serializable {
                     dto.setRecipientName(rs.getString("RecipientName"));
                     dto.setCheckoutDate(rs.getTimestamp("CheckoutDate"));
                     dto.setUsername(username);
+                    list.add(dto);
+                }
+            }
+        } finally {
+            closeConnection();
+        }
+        return list;
+    }
+
+    public List<OrderDTO> getHistoryByDate(String date, String username) throws SQLException, ClassNotFoundException {
+        List<OrderDTO> list = null;
+        try {
+            conn = DatabaseUtils.getConnection();
+            if (conn != null) {
+                String sql = "SELECT orderID, checkoutDate, orderAddress, orderPhone, recipientName, paymentType FROM orders WHERE isCheckout = ? AND username = ?";
+                if (!date.isEmpty()) {
+                    sql += " AND datediff(day, checkoutDate, '" + date + "') = 0";
+                }
+                sql += " ORDER BY checkoutDate DESC";
+                pstm = conn.prepareStatement(sql);
+                pstm.setBoolean(1, true);
+                pstm.setString(2, username);
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    OrderDTO dto = new OrderDTO();
+                    dto.setOrderID(rs.getInt("orderID"));
+                    dto.setCheckoutDate(rs.getTimestamp("checkoutDate"));
+                    dto.setOrderAddress(rs.getString("orderAddress"));
+                    dto.setOrderPhone(rs.getString("orderPhone"));
+                    dto.setRecipientName(rs.getString("recipientName"));
+                    dto.setPaymentType(rs.getString("paymentType"));
                     list.add(dto);
                 }
             }

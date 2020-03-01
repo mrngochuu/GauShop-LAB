@@ -60,7 +60,7 @@
                                             <td style="text-align: center;">${dto.productName}</td>
                                             <td style="text-align: center;">${dto.imgURL}</td>
                                             <td style="text-align: center;">${dto.description}</td>
-                                            <td style="text-align: center;">${dto.price}</td>
+                                            <td style="text-align: center;">$${dto.price}</td>
                                             <td style="text-align: center;">${dto.postingDate.hours}:${dto.postingDate.minutes} ${dto.postingDate.date}/${dto.postingDate.month + 1}/${dto.postingDate.year + 1900}</td>
                                             <td style="text-align: center;">${sessionScope.LIST_CATEGORY.get(dto.categoryID).categoryName}</td>
                                             <c:url var="addToCart" value="MainController">

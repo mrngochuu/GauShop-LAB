@@ -19,6 +19,7 @@ public class MainController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
     private static final String LOGIN = "LoginController";
+    private static final String LOGOUT = "LogoutController";
     private static final String SEARCHING_PRODUCT = "SearchProductController";
     private static final String REGISTRATION = "RegistrationController";
     private static final String ADDING_PRODUCT = "AddingProductController";
@@ -26,8 +27,13 @@ public class MainController extends HttpServlet {
     private static final String UPDATING_QUANTITY = "UpdatingQuantityController";
     private static final String DELETING_FROM_CART = "DeleteFromCartController";
     private static final String PAYMENT = "PaymentController";
-    private static final String SHOWING_HISTORY = "ShowingHistoryController";
-    
+    private static final String SEARCH_HISTORY = "SearchHistoryController";
+    private static final String ADMIN_SEARCH_PRODUCT = "AdminSearchProductController";
+    private static final String ADMIN_UPDATE_PRODUCT = "AdminUpdateProductController";
+    private static final String ADMIN_SHOW_PRODUCT = "AdminShowProductController";
+    private static final String ADMIN_UPDATE_PRODUCT_DETAILS = "AdminUpdateProductDetailsController";
+    private static final String ADMIN_CREATE_PRODUCT = "AdminCreateProductController";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,24 +49,36 @@ public class MainController extends HttpServlet {
         String url = ERROR;
         try {
             String action = request.getParameter("action");
-            if(action.equals("Login")) {
+            if (action.equals("Login")) {
                 url = LOGIN;
-            } else if(action.equals("SearchProduct")) {
+            } else if (action.equals("Logout")) {
+                url = LOGOUT;
+            } else if (action.equals("SearchProduct")) {
                 url = SEARCHING_PRODUCT;
-            } else if(action.equals("AddingProduct")) {
+            } else if (action.equals("AddingProduct")) {
                 url = ADDING_PRODUCT;
-            } else if(action.equals("Register")) {
+            } else if (action.equals("Register")) {
                 url = REGISTRATION;
-            } else if(action.equals("ShowCart")) {
+            } else if (action.equals("ShowCart")) {
                 url = SHOWING_CART;
-            } else if(action.equals("UpdateQuantity")) {
+            } else if (action.equals("UpdateQuantity")) {
                 url = UPDATING_QUANTITY;
-            } else if(action.equals("DeleteFromCart")) {
+            } else if (action.equals("DeleteFromCart")) {
                 url = DELETING_FROM_CART;
-            } else if(action.equals("Pay")) {
+            } else if (action.equals("Pay")) {
                 url = PAYMENT;
-            } else if(action.equals("ShowHistory")) {
-                url = SHOWING_HISTORY;
+            } else if (action.equals("SearchHistory")) {
+                url = SEARCH_HISTORY;
+            } else if (action.equals("AdminSearchProduct")) {
+                url = ADMIN_SEARCH_PRODUCT;
+            } else if (action.equals("AdminUpdateProduct")) {
+                url = ADMIN_UPDATE_PRODUCT;
+            } else if (action.equals("AdminShowProduct")) {
+                url = ADMIN_SHOW_PRODUCT;
+            } else if (action.equals("AdminUpdateProductDetails")) {
+                url = ADMIN_UPDATE_PRODUCT_DETAILS;
+            } else if (action.equals("AdminCreateProduct")) {
+                url = ADMIN_CREATE_PRODUCT;
             } else {
                 request.setAttribute("ERROR", "The action is not found!");
             }

@@ -11,70 +11,87 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://kit.fontawesome.com/5a401084f7.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+
+        <script>
+            $(function () {
+                $("#datepicker").datepicker();
+            });
+        </script>
         <title>History Page</title>
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <div class="container" id="content">
-            <h2 class="text-center">Transaction history</h2>
+        <div class="container-fluid"> 
             <div class="row">
-                <c:if test="${not empty requestScope.LIST_ORDER}" var="NoOrder">
-                    <c:forEach items="${requestScope.LIST_ORDER}" var="order">
-                        <table class="table table-striped col-lg-5 mr-auto ml-auto mb-5 mt-5 bg-light border border-warning">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%; text-align: center;">Name</th>
-                                    <th style="width: 25%; text-align: center;">IMG</th>
-                                    <th style="width: 15%; text-align: center;">Price</th>
-                                    <th style="width: 15%; text-align: center;">Quantity</th>
-                                    <th style="width: 20%; text-align: center;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:set var="total" value="0"/>
-                                <c:set var="LIST_ORDER_DETAILS" value="LIST_ORDER_DETAILS_${order.orderID}"/>
-                                <c:set var="LIST_PRODUCT" value="LIST_PRODUCT_${order.orderID}"/>
-                                <c:forEach items="${requestScope[LIST_ORDER_DETAILS]}" var="orderDetailsDTO">
-                                    <c:set var="total" value="${total + (orderDetailsDTO.price * orderDetailsDTO.quantity)}"/>
-                                    <tr>
-                                        <td style="text-align: center;">${requestScope[LIST_PRODUCT][orderDetailsDTO.productID].productName}</td>
-                                        <td style="text-align: center;">${requestScope[LIST_PRODUCT][orderDetailsDTO.productID].imgURL}</td>
-                                        <td style="text-align: center;">${orderDetailsDTO.price}</td>
-                                        <td style="text-align: center;">${orderDetailsDTO.quantity}</td>
-                                        <td style="text-align: center;">${orderDetailsDTO.price * orderDetailsDTO.quantity}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td class="text-center" colspan="1"><strong>Total</strong></td>
-                                    <td class="text-center" colspan="1"><strong>$${total}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5">
-                                        <h4>Payment infomation:</h4>
-                                        <p>Recipient's Name: ${order.recipientName}</p>
-                                        <p>Recipient's Phone: ${order.orderPhone}</p>
-                                        <p>Delivery address: ${order.orderAddress}</p>
-                                        <p>Payment type: 
-                                            <c:if test="${order.paymentType eq 'cast'}">Cash payment upon delivery</c:if>
-                                            <c:if test="${order.paymentType eq 'paypal'}">Paypal payment</c:if>
-                                            </p>
-                                            <p>Payment date: ${order.checkoutDate.hours}:${order.checkoutDate.minutes} ${order.checkoutDate.date}/${order.checkoutDate.month + 1}/${order.checkoutDate.year + 1900}</p>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                <div class="col-sm-12 col-md-12 col-lg-12 mx-auto">
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
+                            <h2 class="text-center">Transaction history</h2>
+                            <form action="MainController" method="GET" class="mb-3"> 
+                                <input type="text" name="txtSearch" value="${param.txtSearch}" placeholder="Product name"/>
+                                <input type="text" name="dateStr" value="${param.dateStr}" id="datepicker" placeholder="dd/mm/yyyy" readonly="true"/>
+                                <button name="action" value="SearchHistory">SEARCH</button>
+                            </form>
+                            <c:if test="${not empty requestScope.LIST_ORDER}" var="NoOrder">
+                                <table class="table table-striped">
+                                    <thead class="border border-warning" style="border: 1px;">
+                                        <tr>
+                                            <th style="width: 10%; text-align: center;">Product Name</th>
+                                            <th style="width: 15%; text-align: center;">Product IMG</th>
+                                            <th style="width: 5%; text-align: center;">Price</th>
+                                            <th style="width: 5%; text-align: center;">Quantity</th>
+                                            <th style="width: 5%; text-align: center;">Amount</th>
+                                            
+                                            <th style="width: 10%; text-align: center;">Recipient Name</th>
+                                            <th style="width: 10%; text-align: center;">Recipient Phone</th>
+                                            <th style="width: 10%; text-align: center;">Delivery Address</th>
+                                            <th style="width: 15%; text-align: center;">Payment type</th>
+                                            <th style="width: 5%; text-align: center;">Checkout Day</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${requestScope.LIST_ORDER}" var="order">
+                                            <c:forEach items="${requestScope.HASTABLE_ORDER_DETAILS[order.orderID]}" var="details">
+                                                <c:if test="${not empty requestScope.HASTABLE_PRODUCT[details.productID]}">
+                                                    <tr>
+                                                        <td style="text-align: center;">${requestScope.HASTABLE_PRODUCT[details.productID].productName}</td>
+                                                        <td style="text-align: center;">${requestScope.HASTABLE_PRODUCT[details.productID].imgURL}</td>
+                                                        <td style="text-align: center;">$${details.price}</td>
+                                                        <td style="text-align: center;">${details.quantity}</td>
+                                                        <td style="text-align: center;">$${details.quantity * details.price}</td>
+                                                        
+                                                        <td style="text-align: center;">${order.recipientName}</td>
+                                                        <td style="text-align: center;">${order.orderPhone}</td>
+                                                        <td style="text-align: center;">${order.orderAddress}</td>
+                                                        <td style="text-align: center;">
+                                                            <c:if test="${order.paymentType eq 'cast'}">Cash payment upon delivery</c:if>
+                                                            <c:if test="${order.paymentType eq 'paypal'}">Paypal online</c:if>
+                                                        </td>
+                                                        <td style="text-align: center;">${order.checkoutDate.hours}:${order.checkoutDate.minutes} ${order.checkoutDate.date}/${order.checkoutDate.month + 1}/${order.checkoutDate.year + 1900}</td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:forEach>
+                                    </tbody>
+                                    <tfoot>
 
+                                    </tfoot>
+                                </table>
 
-                    </c:forEach>
-                </c:if>
+                            </c:if>
+                            <c:if test="${!NoOrder}">
+                                <h4>There is no transaction history!!</h4>
+                            </c:if> 
+                        </div>
+                    </div>
+                </div>
             </div>
-            <c:if test="${!NoOrder}">
-                <h4>There is no transaction history!!</h4>
-            </c:if> 
         </div>
-        <%@include file="footer.jsp" %>
-    </body>
+    </div>
+    <%@include file="footer.jsp" %>
+</body>
 </html>

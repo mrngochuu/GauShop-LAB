@@ -26,11 +26,12 @@ import javax.servlet.http.HttpSession;
  * @author ngochuu
  */
 public class PaymentController extends HttpServlet {
+
     private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "SearchProductController";
     private static final String INVALID_PRODUCT = "ShowingCartController";
     private static final String INVALID = "orderDetails.jsp";
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,54 +54,50 @@ public class PaymentController extends HttpServlet {
             String payment = request.getParameter("paymentType");
             PaymentErrorObject errorObject = new PaymentErrorObject();
             boolean validate = true;
-            if(name.isEmpty()) {
+            if (name.isEmpty()) {
                 errorObject.setRecipientNameError("Recipent name is required!");
                 validate = false;
             }
-            
-            if(!phone.matches("0\\d{2}-\\d{7}")) {
+
+            if (!phone.matches("0\\d{2}-\\d{7}")) {
                 errorObject.setPhoneError("Form phone number is 0XX-XXXXXXX (X is stand for digits)!");
                 validate = false;
             }
-            
-            if(address.isEmpty()) {
+
+            if (address.isEmpty()) {
                 errorObject.setAddressError("Address is required!");
                 validate = false;
             }
-            
-            if(payment.isEmpty()) {
+
+            if (payment.isEmpty()) {
                 errorObject.setPaymentTypeError("Please choose a payment type!");
                 validate = false;
             }
-            if(validate) {
+            if (validate) {
                 List<OrderDetailsDTO> listOrderDetails = new OrderDetailsDAO().getObjectsByOrderID(orderDTO.getOrderID());
-                if(listOrderDetails != null) {
+                if (listOrderDetails != null) {
                     boolean checkedSoldout = true;
                     ProductDAO productDAO = new ProductDAO();
                     //check avaiable products
                     for (OrderDetailsDTO dto : listOrderDetails) {
-                        if(!productDAO.checkAvaiable(dto.getOrderID(), dto.getQuantity(), "active")) {
+                        if (!productDAO.checkAvaiable(dto.getOrderID(), dto.getQuantity(), "active")) {
                             checkedSoldout = false;
                             break;
                         }
                     }
-                    if(checkedSoldout) {
+                    if (checkedSoldout) {
                         orderDTO.setOrderAddress(address);
                         orderDTO.setOrderPhone(phone);
                         orderDTO.setRecipientName(name);
                         orderDTO.setPaymentType(payment);
                         orderDTO.setCheckout(true);
                         orderDTO.setCheckoutDate(Timestamp.valueOf(java.time.LocalDateTime.now()));
-                        
-                        if(new OrderDAO().updateObject(orderDTO)) {
+
+                        if (new OrderDAO().updateObject(orderDTO)) {
                             //subtract quantity in store
                             for (OrderDetailsDTO dto : listOrderDetails) {
-                                String status = "";
                                 ProductDTO productDTO = productDAO.getObjectByProductID(dto.getProductID());
-                                if(productDTO.getQuantity() == dto.getQuantity()) {
-                                    status = "soldout";
-                                }
-                                productDAO.updateQuantity(productDTO.getProductID(), productDTO.getQuantity() - dto.getQuantity(), status);
+                                productDAO.updateQuantity(productDTO.getProductID(), productDTO.getQuantity() - dto.getQuantity());
                             }
                             OrderDTO newOrderDTO = new OrderDAO().createObject(orderDTO.getUsername());
                             session.setAttribute("ORDER", newOrderDTO);

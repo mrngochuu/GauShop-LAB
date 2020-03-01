@@ -3,32 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package quest.controllers;
+package admin.controllers;
 
-import daos.OrderDAO;
-import daos.RoleDAO;
-import daos.UserDAO;
-import dtos.OrderDTO;
-import dtos.RoleDTO;
-import dtos.UserDTO;
-import dtos.UserErrorObject;
+import daos.ProductDAO;
+import dtos.ProductDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ngochuu
  */
-public class LoginController extends HttpServlet {
-
+public class AdminShowProductController extends HttpServlet {
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "SearchProductController";
-    private static final String INVALID = "login.jsp";
-
+    private static final String SUCCESS = "productDetails.jsp";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,52 +36,26 @@ public class LoginController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            String username = request.getParameter("txtUsername");
-            String password = request.getParameter("txtPassword");
-
-            UserErrorObject errorObj = new UserErrorObject();
-            boolean valid = true;
-            if (username.isEmpty() || username == null) {
-                errorObj.setUsernameError("Username is required!");
-                valid = false;
+            int productID;
+            try {
+                productID = Integer.parseInt(request.getParameter("productID"));
+            } catch (Exception e) {
+                productID = 0;
             }
-
-            if (password.isEmpty() || username == null) {
-                errorObj.setPasswordError("Password is required!");
-                valid = false;
-            }
-
-            if (valid) {
-                UserDTO userDTO = new UserDAO().checkLogin(username, password);
-                if (userDTO != null) {
-                    RoleDTO roleDTO = new RoleDAO().getObjectByID(userDTO.getRoleID());
-                    if (roleDTO != null) {
-                        HttpSession session = request.getSession();
-                        if (roleDTO.getRoleName().equals("user")) {
-                            OrderDTO orderDTO = new OrderDAO().getCurrentObjectByUsername(username);
-                            if (orderDTO == null) {
-                                orderDTO = new OrderDAO().createObject(username);
-                            }
-                            session.setAttribute("ORDER", orderDTO);
-                        }
-                        session.setAttribute("USER", userDTO);
-                        session.setAttribute("ROLE", roleDTO);
-                        url = SUCCESS;
-                    } else {
-                        request.setAttribute("ERROR", "Role is not found!");
-                    }
+            
+            if(productID > 0) {
+                ProductDTO productDTO = new ProductDAO().getObjectByProductID(productID);
+                if(productDTO != null) {
+                    request.setAttribute("PRODUCT", productDTO);
+                    url = SUCCESS;
                 } else {
-                    errorObj.setLoginError("Invalid username or password!");
-                    request.setAttribute("INVALID", errorObj);
-                    url = INVALID;
+                    request.setAttribute("ERROR", "The product is not found!");
                 }
             } else {
-                request.setAttribute("INVALID", errorObj);
-                url = INVALID;
+                request.setAttribute("ERROR", "The product does not exist!");
             }
-
         } catch (Exception e) {
-            log("ERROR at LoginController: " + e.getMessage());
+            log("ERROR at AdminShowProductController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

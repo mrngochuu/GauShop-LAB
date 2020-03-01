@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,29 +40,34 @@
                         <c:forEach items="${requestScope.LIST_ORDER_DETAILS}" var="orderDTO">
                             <c:set var="total" value="${total + (orderDTO.price * orderDTO.quantity)}"/>
                             <tr>
+                                <c:set var="soldout" value="${requestScope.LIST_PRODUCT[orderDTO.productID].quantity eq 0}"/>
                                 <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].productName}</td>
                                 <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].imgURL}</td>
                                 <td style="text-align: center;">${requestScope.LIST_PRODUCT[orderDTO.productID].description}</td>
-                                <td style="text-align: center;">${orderDTO.price}</td>
+                                <td style="text-align: center;">$${orderDTO.price}</td>
                                 <td style="text-align: center;">
                                     <form action="MainController" method="POST">
-                                        <input style="width: 50px;" class="text-center" type="number" name="quantity" value="${orderDTO.quantity}" onchange="this.form.submit()"/>
+                                        <input style="width: 50px;" class="text-center" type="number" name="quantity" value="<c:if test="${soldout}">0</c:if><c:if test="${not soldout}">${orderDTO.quantity}</c:if>" onchange="this.form.submit()"/>
                                         <input type="hidden" name="productID" value="${orderDTO.productID}"/>
                                         <input type="hidden" name="action" value="UpdateQuantity"/>
                                     </form>
                                 </td>
-                                <td style="text-align: center;">${orderDTO.quantity * orderDTO.price}</td>
+                                <td style="text-align: center;">$${orderDTO.quantity * orderDTO.price}</td>
                                 <td style="text-align: center;" >
-                                    <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'active' && requestScope.LIST_PRODUCT[orderDTO.productID].quantity >= orderDTO.quantity}"><span class="btn btn-light text-success">Available</span></c:if>
-                                    <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'soldout'}"><span class="btn btn-light text-info">Sold-out</span></c:if>
-                                    <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'deleted'}"><span class="btn btn-light  text-danger">Not available</span></c:if>
-                                    <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'active' && requestScope.LIST_PRODUCT[orderDTO.productID].quantity < orderDTO.quantity}"><span class="btn btn-light text-warning">Only ${requestScope.LIST_PRODUCT[orderDTO.productID].quantity} products remain</span></c:if>
+                                    <c:if test="${soldout}"><span class="btn btn-light text-info">Sold-out</span></c:if>
+                                    <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'inactive'}"><span class="btn btn-light text-danger">Not available</span></c:if>
+                                    <c:if test="${not soldout}">
+                                        <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'active' && requestScope.LIST_PRODUCT[orderDTO.productID].quantity >= orderDTO.quantity}"><span class="btn btn-light text-success">Available</span></c:if>
+                                        <c:if test="${requestScope.LIST_PRODUCT[orderDTO.productID].status eq 'active' && requestScope.LIST_PRODUCT[orderDTO.productID].quantity < orderDTO.quantity}"><span class="btn btn-light text-warning">Only ${requestScope.LIST_PRODUCT[orderDTO.productID].quantity} products remain</span></c:if>
+                                    </c:if>
                                 </td>
                                 <!-- delete -->
                                 <td class="active">
                                     <form action="confirmation.jsp" method="POST">
                                         <input type="hidden" name="productID" value="${orderDTO.productID}"/>
-                                        <input type="hidden" name="mess" value="Do you want to delete ${requestScope.LIST_PRODUCT[orderDTO.productID].productName} ?"/>
+                                        <input type="hidden" name="yesAction" value="DeleteFromCart"/>
+                                        <input type="hidden" name="noAction" value="ShowCart"/>
+                                        <input type="hidden" name="message" value="Do you want to delete ${requestScope.LIST_PRODUCT[orderDTO.productID].productName} ?"/>
                                         <input type="submit" class="btn btn-block btn-warning" value="Delete">
                                     </form>
                                 </td>

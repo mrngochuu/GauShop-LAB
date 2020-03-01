@@ -40,6 +40,38 @@
         <servlet-name>ShowingHistoryController</servlet-name>
         <servlet-class>user.controllers.ShowingHistoryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>general.controllers.LogoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductController</servlet-name>
+        <servlet-class>admin.controllers.DeleteProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSearchProductController</servlet-name>
+        <servlet-class>admin.controllers.AdminSearchProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminUpdateProductController</servlet-name>
+        <servlet-class>admin.controllers.AdminUpdateProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminShowProductController</servlet-name>
+        <servlet-class>admin.controllers.AdminShowProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminUpdateProductDetailsController</servlet-name>
+        <servlet-class>admin.controllers.AdminUpdateProductDetailsController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminCreateProductController</servlet-name>
+        <servlet-class>admin.controllers.AdminCreateProductController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchHistoryController</servlet-name>
+        <servlet-class>user.controllers.SearchHistoryController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -79,6 +111,38 @@
     <servlet-mapping>
         <servlet-name>ShowingHistoryController</servlet-name>
         <url-pattern>/ShowingHistoryController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/LogoutController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductController</servlet-name>
+        <url-pattern>/DeleteProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSearchProductController</servlet-name>
+        <url-pattern>/AdminSearchProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminUpdateProductController</servlet-name>
+        <url-pattern>/AdminUpdateProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminShowProductController</servlet-name>
+        <url-pattern>/AdminShowProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminUpdateProductDetailsController</servlet-name>
+        <url-pattern>/AdminUpdateProductDetailsController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminCreateProductController</servlet-name>
+        <url-pattern>/AdminCreateProductController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchHistoryController</servlet-name>
+        <url-pattern>/SearchHistoryController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

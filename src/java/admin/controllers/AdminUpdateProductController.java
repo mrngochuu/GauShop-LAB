@@ -3,32 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package user.controllers;
+package admin.controllers;
 
-import daos.OrderDAO;
-import daos.OrderDetailsDAO;
 import daos.ProductDAO;
-import dtos.OrderDTO;
-import dtos.OrderDetailsDTO;
-import dtos.ProductDTO;
-import dtos.UserDTO;
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.List;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ngochuu
  */
-public class ShowingHistoryController extends HttpServlet {
+public class AdminUpdateProductController extends HttpServlet {
 
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "history.jsp";
+    private static final String SUCCESS = "AdminSearchProductController";
+    private static final String CONFIRM = "confirmation.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,25 +37,23 @@ public class ShowingHistoryController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            HttpSession session = request.getSession();
-            UserDTO userDTO = (UserDTO) session.getAttribute("USER");
-
-            List<OrderDTO> listOrder = new OrderDAO().getListObjectByUsername(userDTO.getUsername(), true);
-            if (listOrder != null) {
-                for (OrderDTO orderDTO : listOrder) {
-                    List<OrderDetailsDTO> listOrderDetails = new OrderDetailsDAO().getObjectsByOrderID(orderDTO.getOrderID());
-                    Hashtable<Integer, ProductDTO> listProduct = new Hashtable<>();
-                    for (OrderDetailsDTO orderDetails : listOrderDetails) {
-                        listProduct.put(orderDetails.getProductID(), new ProductDAO().getObjectByProductID(orderDetails.getProductID()));
-                    }
-                    request.setAttribute("LIST_ORDER_DETAILS_" + orderDTO.getOrderID(), listOrderDetails);
-                    request.setAttribute("LIST_PRODUCT_" + orderDTO.getOrderID(), listProduct);
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            String statusProduct = request.getParameter("statusProduct");
+            String status = request.getParameter("status");
+            int categoryID = Integer.parseInt(request.getParameter("category"));
+            String confirm = request.getParameter("confirm");
+            if (confirm == null && !status.equals(statusProduct)) {
+                url = CONFIRM;
+            } else {
+                if(new ProductDAO().updateCategoryAndStatus(productID, status, categoryID)) {
+                    request.setAttribute("MESSAGE", "Updating product is successful");
+                    url = SUCCESS;
+                } else {
+                    request.setAttribute("ERROR", "Updating product failed!");
                 }
             }
-            request.setAttribute("LIST_ORDER", listOrder);
-            url = SUCCESS;
         } catch (Exception e) {
-                log("ERROR at ShowingHistoryController: " + e.getMessage());
+            log("ERROR at AdminUpdateProductController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

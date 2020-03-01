@@ -17,7 +17,7 @@ public class ProductDTO implements Serializable {
     private int productID, quantity, categoryID;
     private String productName, imgURL, status, description;
     private Timestamp postingDate;
-    private double price;
+    private float price;
     
     public ProductDTO() {
     }
@@ -30,13 +30,6 @@ public class ProductDTO implements Serializable {
         this.productID = productID;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 
     public int getQuantity() {
         return quantity;
@@ -92,6 +85,14 @@ public class ProductDTO implements Serializable {
 
     public void setPostingDate(Timestamp postingDate) {
         this.postingDate = postingDate;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
 }

@@ -17,16 +17,26 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="ml-auto mr-auto p-3 bg-light">
-                    <c:url var="showCartLink" value="MainController">
-                        <c:param name="action" value="ShowCart"/>
-                    </c:url>
-                    <div class="mb-4"><h2>${param.mess}</h2></div>
+                    <div class="mb-4"><h2>${param.message}</h2></div>
                     <div class="row">
                         <form action="MainController" method="POST" class="m-auto">
                             <input type="hidden" name="productID" value="${param.productID}"/>
-                            <button type="submit" name="action" value="DeleteFromCart" class="btn btn-secondary text-center pl-5 pr-5"><h5>Yes</h5></button>
+                            <input type="hidden" name="status" value="${param.status}"/>
+                            <input type="hidden" name="category" value="${param.category}"/>
+                            <input type="hidden" name="txtSearch" value="${param.txtSearch}"/>
+                            <input type="hidden" name="cbStatus" value="${param.cbStatus}"/>
+                            <input type="hidden" name="cbCategory" value="${param.cbCategory}"/>
+                            <input type="hidden" name="confirm" value="yes"/>
+                            <button type="submit" name="action" value="${param.yesAction}" class="btn btn-secondary text-center pl-5 pr-5"><h5>Yes</h5></button>
                         </form>
-                        <a href="${showCartLink}" class="btn btn-secondary text-center m-auto pl-5 pr-5"><h5>No</h5></a>
+
+                        <form action="MainController" method="POST" class="m-auto">
+                            <input type="hidden" name="productID" value="${param.productID}"/>
+                            <input type="hidden" name="txtSearch" value="${param.txtSearch}"/>
+                            <input type="hidden" name="cbStatus" value="${param.cbStatus}"/>
+                            <input type="hidden" name="cbCategory" value="${param.cbCategory}"/>
+                            <button type="submit" name="action" value="${param.noAction}" class="btn btn-secondary text-center pl-5 pr-5"><h5>No</h5></button>
+                        </form>
                     </div>
                 </div>
             </div>
