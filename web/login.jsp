@@ -28,6 +28,10 @@
                                 <font class="mb-3" color="red"><p class="mb-3">${requestScope.INVALID.loginError}</p></font>
                                 <input type="submit" name="action" value="Login" class="btn btn-lg btn-primary btn-block text-uppercase mb-3">
                             </form>
+                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8084/GauShop/login-google&response_type=code
+                               &client_id=628308871059-4529d0en8dkn6c8ks4160ghsm60ggono.apps.googleusercontent.com&approval_prompt=force">
+                                <p class="btn btn-lg btn-danger form-control text-center text-white">Login with Google</p>
+                            </a>
                             <hr class="my-4">
                             <div class="mb-3">
                                 <c:url var="homeLink" value="MainController">

@@ -16,7 +16,7 @@ import java.sql.SQLException;
  */
 public class DatabaseUtils implements Serializable {
     private static final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static final String URL = "jdbc:sqlserver://localhost:1433; databaseName=GauShop";
+    private static final String URL = "jdbc:sqlserver://localhost:1433; databaseName=ShopingOnline";
     private static final String USER = "sa";
     private static final String PASS = "NgocHuu215302577";
     

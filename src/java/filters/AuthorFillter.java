@@ -51,11 +51,14 @@ public class AuthorFillter implements Filter {
         quest.add("registration.jsp");
         quest.add("footer.jsp");
         quest.add("header.jsp");
+        quest.add("newjsp.jsp");
 
         quest.add("MainController");
         quest.add("SearchProductController");
         quest.add("LoginController");
         quest.add("RegistrationController");
+        quest.add("LoginByGoogleController");
+        quest.add("login-google");
 
         quest.add("SearchProduct");
         quest.add("Login");

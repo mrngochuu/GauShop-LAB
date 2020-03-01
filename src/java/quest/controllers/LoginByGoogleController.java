@@ -3,24 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package user.controllers;
+package quest.controllers;
 
-import daos.OrderDetailsDAO;
+import daos.OrderDAO;
+import daos.RoleDAO;
+import daos.UserDAO;
+import dtos.GooglePojo;
 import dtos.OrderDTO;
+import dtos.RoleDTO;
+import dtos.UserDTO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import utils.GoogleUtils;
 
 /**
  *
  * @author ngochuu
  */
-public class DeleteFromCartController extends HttpServlet {
+public class LoginByGoogleController extends HttpServlet {
+
     private static final String ERROR = "error.jsp";
-    private static final String SUCCESS = "ShowingCartController";
+    private static final String SUCCESS = "SearchProductController";
+    private static final String INVALID = "login.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,21 +44,41 @@ public class DeleteFromCartController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            HttpSession session = request.getSession();
-            OrderDTO orderDTO = (OrderDTO) session.getAttribute("ORDER");
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            if(productID > 0) {
-                if(new OrderDetailsDAO().deleteFromCart(orderDTO.getOrderID(), productID)) {
-                    request.setAttribute("MESSAGE", "Delete the product success!");
-                    url = SUCCESS;
-                } else {
-                    request.setAttribute("ERROR", "Delete the product failed");
-                }
+            String code = request.getParameter("code");
+            if (code == null || code.isEmpty()) {
+                url = INVALID;
             } else {
-                request.setAttribute("ERROR", "The product is not found!");
+                String accessToken = GoogleUtils.getToken(code);
+                GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
+                
+                UserDTO userDTO = new UserDAO().findingAccountByGoogle(googlePojo.getEmail());
+                if (userDTO == null) {
+                    userDTO = new UserDTO();
+                    userDTO.setUsername(googlePojo.getEmail());
+                    userDTO.setFullname(googlePojo.getName());
+                    userDTO.setRoleID(1);
+                    if (!new UserDAO().storeByGoogleAccount(userDTO)) {
+                        request.setAttribute("ERROR", "Login by Google Account failed");
+                    }
+                }
+
+                RoleDTO roleDTO = new RoleDAO().getObjectByID(userDTO.getRoleID());
+                if (roleDTO != null) {
+                    HttpSession session = request.getSession();
+                    if (roleDTO.getRoleName().equals("user")) {
+                        OrderDTO orderDTO = new OrderDAO().getCurrentObjectByUsername(userDTO.getUsername());
+                        if (orderDTO == null) {
+                            orderDTO = new OrderDAO().createObject(userDTO.getUsername());
+                        }
+                        session.setAttribute("ORDER", orderDTO);
+                    }
+                    session.setAttribute("USER", userDTO);
+                    session.setAttribute("ROLE", roleDTO);
+                    url = SUCCESS;
+                }
             }
         } catch (Exception e) {
-            log("ERROR at DeleteFromCartController: " + e.getMessage());
+            log("ERROR at LoginByGoogleController: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

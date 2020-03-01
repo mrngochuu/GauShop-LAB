@@ -17,6 +17,9 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordUtils implements Serializable {
 
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
+        if (password == null) {
+            return null;
+        }
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] hashInBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
@@ -24,5 +27,6 @@ public class PasswordUtils implements Serializable {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+
     }
 }
